@@ -1,0 +1,6 @@
+#!/bin/sh
+__dir__=`dirname $0`
+java \
+    -Dfile.encoding=UTF8 \
+    -cp ${__dir__}/rhoop.jar:${__dir__}/js.jar \
+    org.rhoop.Rhoop $*
