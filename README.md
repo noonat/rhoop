@@ -4,41 +4,22 @@ If I'm doomed to stay on the Dark Island, I might as well make the best of it.
 
 rhoop is an event loop class for Rhino, inspired by libev (and node's use of
 libev). It doesn't provide any stream or network abstraction (yet), so you
-still need to use Java classes when appropriate.
-
-## Running standalone
-
-If you add the `bin` folder to your path, you can run scripts with:
-
-    rhoop test.js
-    
-Or with a shebang:
-
-    #!/usr/bin/env rhoop
-    java.lang.System.out.println("Hello, world!");
-
-## Running from within Rhino
-
-You can also use it from within a normal Rhino shell, as long as you include
-`rhoop.jar` in the classpath:
-
-    $ java -cp js.jar:rhoop.jar org.mozilla.javascript.tools.shell.Main
-
-    Rhino 1.7 release 3 PRERELEASE 2010 04 07
-    js> context = org.mozilla.javascript.Context.getCurrentContext();
-    js> org.rhoop.Rhoop.load(context, this, []);
-    js> Reactor = rhoop.require('reactor').Reactor;
-    js> reactor = new Reactor();
-    js> reactor.nextTick(function() {
-      >     print("ohai");
-      > });
-    js> reactor.run();
-    ohai
-    js> 
+still need to use Java classes when appropriate (ugly).
 
 ## Examples
 
-Example echo server:
+A timeout:
+
+    var Reactor = require('reactor').Reactor
+      , stdout = java.lang.System.out;
+
+    var reactor = new Reactor();
+    reactor.delayCallback(5, function() {
+        stdout.println('Oh! Hello, world!');
+    });
+    reactor.run();
+
+An echo server:
 
     var Reactor = require('reactor').Reactor
       , ByteBuffer = java.nio.ByteBuffer
@@ -74,6 +55,37 @@ Example echo server:
     });
 
     reactor.run();  // this will block
+
+## Running standalone
+
+If you add the `bin` folder to your path, you can run scripts with:
+
+    rhoop test.js
+
+Or with a shebang:
+
+    #!/usr/bin/env rhoop
+    java.lang.System.out.println("Hello, world!");
+
+## Running from within Rhino
+
+You can also use it from within a normal Rhino shell, as long as you include
+`rhoop.jar` in the classpath:
+
+    $ java -cp js.jar:rhoop.jar org.mozilla.javascript.tools.shell.Main
+
+    Rhino 1.7 release 3 PRERELEASE 2010 04 07
+    js> context = org.mozilla.javascript.Context.getCurrentContext();
+    js> org.rhoop.Rhoop.load(context, this, []);
+    js> Reactor = rhoop.require('reactor').Reactor;
+    js> reactor = new Reactor();
+    js> reactor.nextTick(function() {
+      >     print("ohai");
+      > });
+    js> reactor.run();
+    ohai
+    js> 
+
 
 ## License 
 
